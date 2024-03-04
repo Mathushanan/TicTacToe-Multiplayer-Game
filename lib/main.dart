@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tictactoe_game/screens/create_room_screen.dart';
+import 'package:tictactoe_game/screens/join_room_screen.dart';
 import 'package:tictactoe_game/screens/main_menu_screen.dart';
 import 'package:tictactoe_game/utils/colors.dart';
 
@@ -7,7 +9,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key?key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: bgColor,
       ),
-      home: const MainMenuScreen(),
+      routes: {
+          MainMenuScreen.routeName: (context) => const MainMenuScreen(),
+          JoinRoomScreen.routeName: (context) => const JoinRoomScreen(),
+          CreateRoomScreen.routeName: (context) => const CreateRoomScreen(),
+          
+        },
+     initialRoute: MainMenuScreen.routeName,
     );
   }
 }
