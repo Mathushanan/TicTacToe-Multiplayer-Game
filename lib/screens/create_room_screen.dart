@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tictactoe_game/resources/socket_methods.dart';
 import 'package:tictactoe_game/responsive/responsive.dart';
 import 'package:tictactoe_game/widgets/custom_button.dart';
 import 'package:tictactoe_game/widgets/custom_text.dart';
@@ -13,9 +14,11 @@ class CreateRoomScreen extends StatefulWidget {
 }
 
 class _CreateRoomScreenState extends State<CreateRoomScreen> {
-  
   final TextEditingController _nameController = TextEditingController();
-  
+  final SocketMethods _socketMethods = SocketMethods();
+
+
+
   @override
   void dispose() {
     super.dispose();
@@ -53,7 +56,9 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
               ),
               SizedBox(height: size.height * 0.045),
               CustomButton(
-                  onTap: () {},
+                  onTap: () => _socketMethods.createRoom(
+                        _nameController.text,
+                      ),
                   text: 'Create'),
             ],
           ),
