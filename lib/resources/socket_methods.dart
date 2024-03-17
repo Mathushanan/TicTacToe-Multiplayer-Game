@@ -1,6 +1,9 @@
 
-
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:tictactoe_game/resources/socket_client.dart';
+import 'package:tictactoe_game/screens/game_screen.dart';
 
 class SocketMethods {
   final _socketClient = SocketClient.instance.socket!;
@@ -14,4 +17,14 @@ class SocketMethods {
       });
     }
   }
+
+
+  // LISTENERS
+  void createRoomSuccessListener(BuildContext context) {
+    _socketClient.on('createRoomSuccess', (room) {
+      print(room);
+      Navigator.pushNamed(context, GameScreen.routeName);
+    });
+  }
+
 }
