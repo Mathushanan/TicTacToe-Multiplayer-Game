@@ -16,7 +16,14 @@ class JoinRoomScreen extends StatefulWidget {
 class _JoinRoomScreenState extends State<JoinRoomScreen> {
   final TextEditingController _gameIdController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  final SocketMethods _socketmethods = SocketMethods();
+  final SocketMethods _socketMethods = SocketMethods();
+
+  @override
+  void initState() {
+    super.initState();
+    _socketMethods.joinRoomSuccessListener(context);
+    _socketMethods.errorOccuredListener(context);
+  }
 
   @override
   void dispose() {
@@ -61,7 +68,7 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
               ),
               SizedBox(height: size.height * 0.045),
               CustomButton(
-                  onTap: () => _socketmethods.joinRoom(
+                  onTap: () => _socketMethods.joinRoom(
                       _nameController.text, _gameIdController.text),
                   text: 'Join'),
             ],
