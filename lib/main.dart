@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tictactoe_game/provider/room_data_provider.dart';
 import 'package:tictactoe_game/screens/create_room_screen.dart';
 import 'package:tictactoe_game/screens/game_screen.dart';
 import 'package:tictactoe_game/screens/join_room_screen.dart';
@@ -14,7 +16,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ChangeNotifierProvider(
+      create:(context)=>RoomDataProvider(),
+      child:MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: bgColor,
@@ -27,7 +31,7 @@ class MyApp extends StatelessWidget {
           
         },
      initialRoute: MainMenuScreen.routeName,
-    );
+    ));
   }
 }
 
