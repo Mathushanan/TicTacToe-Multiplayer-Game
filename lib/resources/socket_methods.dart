@@ -5,6 +5,7 @@ import 'package:tictactoe_game/provider/room_data_provider.dart';
 import 'package:tictactoe_game/resources/socket_client.dart';
 import 'package:tictactoe_game/screens/game_screen.dart';
 import 'package:tictactoe_game/utils/utils.dart';
+
 class SocketMethods {
   final _socketClient = SocketClient.instance.socket!;
 
@@ -26,6 +27,10 @@ class SocketMethods {
     }
   }
 
+
+
+
+
   // LISTENERS
   void createRoomSuccessListener(BuildContext context) {
     _socketClient.on('createRoomSuccess', (room) {
@@ -46,6 +51,17 @@ class SocketMethods {
   void errorOccuredListener(BuildContext context) {
     _socketClient.on('errorOccurred', (data) {
       showSnackBar(context, data);
+    });
+  }
+
+  void updatePlayersStateListener(BuildContext context) {
+    _socketClient.on('updatePlayers', (playerData) {
+      Provider.of<RoomDataProvider>(context, listen: false).updatePlayer1(
+        playerData[0],
+      );
+      Provider.of<RoomDataProvider>(context, listen: false).updatePlayer2(
+        playerData[1],
+      );
     });
   }
 }

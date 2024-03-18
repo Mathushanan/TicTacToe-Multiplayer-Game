@@ -23,6 +23,7 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
     super.initState();
     _socketMethods.joinRoomSuccessListener(context);
     _socketMethods.errorOccuredListener(context);
+    _socketMethods.updatePlayersStateListener(context);
   }
 
   @override
@@ -53,8 +54,8 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
                     color: Colors.blue,
                   ),
                 ],
-                text: 'Create Room',
-                fontSize: 70,
+                text: 'Join Room',
+                fontSize: 65,
               ),
               SizedBox(height: size.height * 0.08),
               CustomTextField(

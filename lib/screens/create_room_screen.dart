@@ -51,7 +51,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                   ),
                 ],
                 text: 'Create Room',
-                fontSize: 70,
+                fontSize: 60,
               ),
               SizedBox(height: size.height * 0.08),
               CustomTextField(
