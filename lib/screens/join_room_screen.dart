@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tictactoe_game/resources/socket_methods.dart';
 import 'package:tictactoe_game/responsive/responsive.dart';
 import 'package:tictactoe_game/widgets/custom_button.dart';
 import 'package:tictactoe_game/widgets/custom_text.dart';
@@ -15,6 +16,7 @@ class JoinRoomScreen extends StatefulWidget {
 class _JoinRoomScreenState extends State<JoinRoomScreen> {
   final TextEditingController _gameIdController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  final SocketMethods _socketmethods = SocketMethods();
 
   @override
   void dispose() {
@@ -58,7 +60,10 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
                 hintText: 'Enter Game ID',
               ),
               SizedBox(height: size.height * 0.045),
-              CustomButton(onTap: () {}, text: 'Join'),
+              CustomButton(
+                  onTap: () => _socketmethods.joinRoom(
+                      _nameController.text, _gameIdController.text),
+                  text: 'Join'),
             ],
           ),
         ),
