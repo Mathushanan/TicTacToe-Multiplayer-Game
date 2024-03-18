@@ -39,7 +39,7 @@ io.on("connection", (socket) => {
 
 
         // io -> send data to everyone
-        // socket -> sending data to yourself
+        // socket -> sending data to ourelf
         io.to(roomId).emit("createRoomSuccess", room);
 
         
