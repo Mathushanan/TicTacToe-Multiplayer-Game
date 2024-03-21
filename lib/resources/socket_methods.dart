@@ -27,10 +27,6 @@ class SocketMethods {
     }
   }
 
-
-
-
-
   // LISTENERS
   void createRoomSuccessListener(BuildContext context) {
     _socketClient.on('createRoomSuccess', (room) {
@@ -62,6 +58,13 @@ class SocketMethods {
       Provider.of<RoomDataProvider>(context, listen: false).updatePlayer2(
         playerData[1],
       );
+    });
+  }
+
+  void updateRoomListener(BuildContext context) {
+    _socketClient.on('updateRoom', (data) {
+      Provider.of<RoomDataProvider>(context, listen: false)
+          .updateRoomData(data);
     });
   }
 }
