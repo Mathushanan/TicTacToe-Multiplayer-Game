@@ -49,53 +49,76 @@ io.on("connection", (socket) => {
 
   });
 
-    socket.on("joinRoom", async ({ nickname, roomId }) => {
-      try {
-        if (!roomId.match(/^[0-9a-fA-F]{24}$/)) {
-          socket.emit("errorOccurred", "Please enter a valid room ID.");
-          return;
-        }
-        let room = await Room.findById(roomId);
-
-        if (room.isJoin) {
-          let player = {
-            nickname,
-            socketID: socket.id,
-            playerType: "O",
-          };
-          socket.join(roomId);
-          room.players.push(player);
-          room.isJoin = false;
-          room = await room.save();
-          io.to(roomId).emit("joinRoomSuccess", room);
-          io.to(roomId).emit("updatePlayers", room.players);
-          io.to(roomId).emit("updateRoom", room);
-        } else {
-          socket.emit(
-            "errorOccurred",
-            "The game is in progress, try again later."
-          );
-        }
-      } catch (e) {
-        console.log(e);
+  socket.on("joinRoom", async ({ nickname, roomId }) => {
+    try {
+      if (!roomId.match(/^[0-9a-fA-F]{24}$/)) {
+        socket.emit("errorOccurred", "Please enter a valid room ID.");
+        return;
       }
+      let room = await Room.findById(roomId);
 
-    });
-  });
-
-
-
-
-
-  mongoose
-    .connect(DB)
-    .then(() => {
-      console.log("MongoDB Connection successful!");
-    })
-    .catch((e) => {
+      if (room.isJoin) {
+        let player = {
+          nickname,
+          socketID: socket.id,
+          playerType: "O",
+        };
+        socket.join(roomId);
+        room.players.push(player);
+        room.isJoin = false;
+        room = await room.save();
+        io.to(roomId).emit("joinRoomSuccess", room);
+        io.to(roomId).emit("updatePlayers", room.players);
+        io.to(roomId).emit("updateRoom", room);
+      } else {
+        socket.emit(
+          "errorOccurred",
+          "The game is in progress, try again later."
+        );
+      }
+    } catch (e) {
       console.log(e);
-    });
+    }
 
-  server.listen(port, "0.0.0.0", () => {
-    console.log(`Server started and running on port ${port}`);
   });
+
+  socket.on("tap", async ({ index, roomId }) => {
+    try {
+      let room = await Room.findById(roomId);
+
+      let choice = room.turn.playerType; // x or o
+      if (room.turnIndex == 0) {
+        room.turn = room.players[1];
+        room.turnIndex = 1;
+      } else {
+        room.turn = room.players[0];
+        room.turnIndex = 0;
+      }
+      room = await room.save();
+      io.to(roomId).emit("tapped", {
+        index,
+        choice,
+        room,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  });
+});
+
+
+
+
+
+mongoose
+  .connect(DB)
+  .then(() => {
+    console.log("MongoDB Connection successful!");
+  })
+  .catch((e) => {
+    console.log(e);
+  });
+
+server.listen(port, "0.0.0.0", () => {
+  console.log(`Server started and running on port ${port}`);
+});

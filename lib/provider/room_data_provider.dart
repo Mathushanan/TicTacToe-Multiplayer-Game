@@ -42,4 +42,14 @@ class RoomDataProvider extends ChangeNotifier {
     _player2 = Player.fromMap(player2Data);
     notifyListeners();
   }
+
+  void updateDisplayElements(int index, String choice) {
+    _displayElement[index] = choice;
+    _filledBoxes += 1;
+    notifyListeners();
+  }
+
+  void setFilledBoxesTo0() {
+    _filledBoxes = 0;
+  }
 }

@@ -9,6 +9,8 @@ import 'package:tictactoe_game/utils/utils.dart';
 class SocketMethods {
   final _socketClient = SocketClient.instance.socket!;
 
+   Socket get socketClient => _socketClient;
+
   // EMITS
   void createRoom(String nickname) {
     if (nickname.isNotEmpty) {
@@ -65,6 +67,29 @@ class SocketMethods {
     _socketClient.on('updateRoom', (data) {
       Provider.of<RoomDataProvider>(context, listen: false)
           .updateRoomData(data);
+    });
+  }
+
+  void tapGrid(int index, String roomId, List<String> displayElements) {
+    if (displayElements[index] == '') {
+      _socketClient.emit('tap', {
+        'index': index,
+        'roomId': roomId,
+      });
+    }
+  }
+
+  void tappedListener(BuildContext context) {
+    _socketClient.on('tapped', (data) {
+      RoomDataProvider roomDataProvider =
+          Provider.of<RoomDataProvider>(context, listen: false);
+      roomDataProvider.updateDisplayElements(
+        data['index'],
+        data['choice'],
+      );
+      roomDataProvider.updateRoomData(data['room']);
+      // check winnner
+      
     });
   }
 }
