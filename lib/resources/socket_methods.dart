@@ -5,11 +5,12 @@ import 'package:tictactoe_game/provider/room_data_provider.dart';
 import 'package:tictactoe_game/resources/socket_client.dart';
 import 'package:tictactoe_game/screens/game_screen.dart';
 import 'package:tictactoe_game/utils/utils.dart';
+import 'package:tictactoe_game/resources/game_methods.dart';
 
 class SocketMethods {
   final _socketClient = SocketClient.instance.socket!;
 
-   Socket get socketClient => _socketClient;
+  Socket get socketClient => _socketClient;
 
   // EMITS
   void createRoom(String nickname) {
@@ -89,7 +90,26 @@ class SocketMethods {
       );
       roomDataProvider.updateRoomData(data['room']);
       // check winnner
-      
+      GameMethods().checkWinner(context, _socketClient);
+    });
+  }
+
+  void pointIncreaseListener(BuildContext context) {
+    _socketClient.on('pointIncrease', (playerData) {
+      var roomDataProvider =
+          Provider.of<RoomDataProvider>(context, listen: false);
+      if (playerData['socketID'] == roomDataProvider.player1.socketID) {
+        roomDataProvider.updatePlayer1(playerData);
+      } else {
+        roomDataProvider.updatePlayer2(playerData);
+      }
+    });
+  }
+
+  void endGameListener(BuildContext context) {
+    _socketClient.on('endGame', (playerData) {
+      showGameDialog(context, '${playerData['nickname']} won the game!');
+      Navigator.popUntil(context, (route) => false);
     });
   }
 }
